@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact CEMForge Publishing - We'd love to hear from you">
+    <title>Contact - CEMForge Publishing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/logo-square.jpg" type="image/jpeg">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html">
+                <img src="images/logo.jpg" alt="CEMForge Publishing" class="logo">
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+            <nav class="nav">
+                <a href="index.html">Books</a>
+                <a href="contact.html" class="active">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="contact-section">
+            <h1>Get in Touch</h1>
+            <p>Whether you have a question about our books, want to share your thoughts as a reader, or just want to say hello — we'd love to hear from you!</p>
+
+            <a href="mailto:cemichel.contact@gmail.com" class="btn btn-primary contact-email">
+                <span>&#9993;</span> cemichel.contact@gmail.com
+            </a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 CEMForge Publishing. All rights reserved. | <a href="index.html">Back to Books</a></p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

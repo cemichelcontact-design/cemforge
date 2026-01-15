@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- UPDATE: Change the description for each book -->
+    <meta name="description" content="Book Title - A brief description of your book">
+    <!-- UPDATE: Change the title for each book -->
+    <title>Book Title - CEMForge Publishing</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="../images/logo-square.jpg" type="image/jpeg">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html">
+                <img src="../images/logo.jpg" alt="CEMForge Publishing" class="logo">
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+            <nav class="nav">
+                <a href="../index.html">Books</a>
+                <a href="../contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <article class="book-detail">
+            <div class="book-cover">
+                <!-- UPDATE: Change the image source and alt text -->
+                <img src="../images/books/book-cover.jpg" alt="Book Title Cover">
+            </div>
+
+            <div class="book-info">
+                <!-- UPDATE: Change the title -->
+                <h1>Your Book Title</h1>
+                <!-- UPDATE: Change or remove the subtitle -->
+                <p class="subtitle">A Subtitle or Series Name</p>
+
+                <div class="description">
+                    <!-- UPDATE: Write your book description/synopsis -->
+                    <p>
+                        This is where you write a compelling description of your book.
+                        Draw readers in with an engaging synopsis that captures the
+                        essence of your story without giving away too much.
+                    </p>
+                    <p>
+                        You can use multiple paragraphs to build intrigue and give
+                        readers a sense of what to expect. Consider including the
+                        genre, themes, or what makes this book special.
+                    </p>
+                </div>
+
+                <div class="purchase-links">
+                    <!-- UPDATE: Add your purchase links -->
+                    <a href="https://amazon.com/your-book-link" class="btn btn-primary" target="_blank" rel="noopener">
+                        Buy on Amazon
+                    </a>
+                    <!-- Add more purchase links as needed -->
+                    <!--
+                    <a href="https://barnesandnoble.com/your-book" class="btn btn-secondary" target="_blank" rel="noopener">
+                        Barnes & Noble
+                    </a>
+                    <a href="https://bookshop.org/your-book" class="btn btn-secondary" target="_blank" rel="noopener">
+                        Bookshop.org
+                    </a>
+                    -->
+                </div>
+
+                <a href="../index.html" class="back-link">&larr; Back to all books</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 CEMForge Publishing. All rights reserved. | <a href="../contact.html">Contact Us</a></p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CEMForge Publishing - Discover our collection of captivating books">
+    <title>CEMForge Publishing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/logo-square.jpg" type="image/jpeg">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html">
+                <img src="images/logo.jpg" alt="CEMForge Publishing" class="logo">
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+            <nav class="nav">
+                <a href="index.html" class="active">Books</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to CEMForge Publishing</h1>
+        <p>Explore our collection of stories crafted with passion and imagination</p>
+    </section>
+
+    <main>
+        <h2 class="section-title">Our Books</h2>
+
+        <div class="book-grid">
+            <!-- Echoes of the Veil -->
+            <article class="book-card">
+                <a href="books/echoes-of-the-veil.html">
+                    <div class="book-card-image">
+                        <img src="images/books/Echoes of the Veil - book 1.jpg" alt="Echoes of the Veil: The Priest, the Devil, and the Angel">
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Echoes of the Veil</h3>
+                    <p class="book-card-tagline">Between salvation and ruin, three ancient enemies must unearth the truth of a world that was never meant to be remembered.</p>
+                    <a href="books/echoes-of-the-veil.html" class="book-card-link">Learn More &rarr;</a>
+                </div>
+            </article>
+
+            <!-- Craving -->
+            <article class="book-card">
+                <a href="books/craving.html">
+                    <div class="book-card-image">
+                        <img src="images/books/Craving.jpg" alt="Craving (Echoes of the Veil Book 2)">
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Craving</h3>
+                    <p class="book-card-tagline">In a city drowning in secrets and rising tides, the truth is the most dangerous thing you can desire.</p>
+                    <a href="books/craving.html" class="book-card-link">Learn More &rarr;</a>
+                </div>
+            </article>
+
+            <!-- The Chosen -->
+            <article class="book-card">
+                <a href="books/the-chosen.html">
+                    <div class="book-card-image">
+                        <img src="images/books/THE CHOSEN - cover 2.jpg" alt="The Chosen: A Documentary (by Mistake)">
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">The Chosen</h3>
+                    <p class="book-card-tagline">When the eyes of the universe turn toward us, the most invisible woman in the world becomes its most important metric.</p>
+                    <a href="books/the-chosen.html" class="book-card-link">Learn More &rarr;</a>
+                </div>
+            </article>
+
+            <!-- In Their Place -->
+            <article class="book-card">
+                <a href="books/in-their-place.html">
+                    <div class="book-card-image">
+                        <img src="images/books/In Their Place - V14 - ebook5.jpg" alt="In Their Place">
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">In Their Place</h3>
+                    <p class="book-card-tagline">Six days, three generations of secrets, and a family empire built on a silence that is finally beginning to break.</p>
+                    <a href="books/in-their-place.html" class="book-card-link">Learn More &rarr;</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 CEMForge Publishing. All rights reserved. | <a href="contact.html">Contact Us</a></p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
