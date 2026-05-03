@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CEMForge Publishing – Von den Geistern der Vergangenheit zu den Sternen der Zukunft.">
+    <title>CEMForge Publishing</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="../images/logo-square.jpg" type="image/jpeg">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html">
+                <img src="../images/logo.jpg" alt="CEMForge Publishing" class="logo">
+            </a>
+            <button class="menu-toggle" aria-label="Menü öffnen">&#9776;</button>
+            <nav class="nav">
+                <a href="index.html" class="active">Bücher</a>
+                <a href="contact.html">Kontakt</a>
+            </nav>
+            <div class="lang-switcher">
+                <a href="../index.html">EN</a>
+                <span class="lang-divider">|</span>
+                <span class="lang-active">DE</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Willkommen bei CEMForge Publishing</h1>
+        <p>Von den Geistern der Vergangenheit zu den Sternen der Zukunft</p>
+    </section>
+
+    <main>
+        <h2 class="section-title">Unsere Bücher</h2>
+
+        <div class="book-grid">
+            <!-- Widerhalle des Schleiers -->
+            <article class="book-card">
+                <a href="books/widerhalle-des-schleiers.html">
+                    <div class="book-card-image">
+                        <img src="../images/books/Echoes of the Veil DE - ebook.jpg" alt="Widerhalle des Schleiers: Der Priester, der Teufel und der Engel">
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Widerhalle des Schleiers</h3>
+                    <p class="book-card-tagline">Zwischen Erlösung und Verderben müssen drei uralte Feinde die Wahrheit einer Welt aufdecken, die niemals erinnert werden sollte.</p>
+                    <a href="books/widerhalle-des-schleiers.html" class="book-card-link">Mehr erfahren &rarr;</a>
+                </div>
+            </article>
+
+            <!-- The Chosen -->
+            <article class="book-card">
+                <a href="books/the-chosen.html">
+                    <div class="book-card-image">
+                        <img src="../images/books/_THE CHOSEN 3 DE - Ebook.jpg" alt="The Chosen: Eine Dokumentation (Aus Versehen)">
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">The Chosen</h3>
+                    <p class="book-card-tagline">Als die Augen des Universums sich auf uns richten, wird die unsichtbarste Frau der Welt zu dessen wichtigstem Maßstab.</p>
+                    <a href="books/the-chosen.html" class="book-card-link">Mehr erfahren &rarr;</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 CEMForge Publishing. Alle Rechte vorbehalten. | <a href="contact.html">Kontakt</a></p>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
