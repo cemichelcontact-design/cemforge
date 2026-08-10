@@ -30,6 +30,7 @@ Pure static site: no framework, no bundler, no JavaScript dependencies.
 - `images/books/` — Book cover images; German editions are named with `DE` in the filename
 - `details/books.txt` — Canonical book summaries and taglines (source of truth for copy)
 - `details/links.txt` — Amazon purchase links for all editions
+- `61584bf0d00e/` — Private gym log app; not part of the book site (see below)
 
 ## Language structure
 
@@ -50,6 +51,26 @@ Only books with a German edition show the EN/DE language switcher. Echoes of the
 - **In Their Place** series: In Their Place (book 1), In Their Name (book 2 — English only, not yet published)
 
 New books should be added to `index.html` in series order. Unpublished books should use placeholder text and a `href="#"` for the Amazon link, and must not be committed/pushed until ready.
+
+## Gym log app (`61584bf0d00e/`)
+
+A standalone personal workout tracker, unrelated to the book site. It is a
+self-contained PWA — `index.html` (inline CSS and JS), `manifest.webmanifest`,
+`sw.js`, and two PNG icons. It does **not** use `css/styles.css`, and the path
+conventions in the table above do not apply to it. The folder name is
+deliberately opaque so the page is not stumbled upon.
+
+Rules for this folder:
+
+- **Never link to it** from `index.html`, `contact.html`, or any German page.
+- **Never add it to `robots.txt`.** A `Disallow` line would publish the exact
+  path at `cemforge.com/robots.txt`, defeating the point. The page carries a
+  `noindex` meta tag instead.
+- **Never commit workout data.** All data lives in the browser's
+  `localStorage`; the committed files are an empty app shell. That is what
+  makes hosting it in a public repo acceptable.
+- `sw.js` is network-first, so a normal reload always picks up a new deploy.
+  Bump the `CACHE` constant only if the caching strategy itself changes.
 
 ## Git / deploy
 
