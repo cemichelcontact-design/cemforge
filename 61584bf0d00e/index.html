@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#2D2520">
+<script>
+/* Resolve the theme before first paint so a light user never sees a dark flash. */
+try {
+    var t = localStorage.getItem('gymlog.theme') || 'dark';
+    if (t === 'system') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t;
+    if (t === 'light') document.querySelector('meta[name=theme-color]').content = '#F7F2EA';
+} catch (e) {}
+</script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,18 +22,44 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Gym Log</title>
 <style>
-:root {
+/* Dark is the default palette; the head script always stamps an explicit
+   data-theme, so [data-theme=dark] repeats it for when the toggle sets it back. */
+:root, :root[data-theme="dark"] {
     --bg: #2D2520;
     --bg2: #3D3530;
     --bg3: #4A413A;
+    --line: transparent;
     --fg: #F5F0E8;
     --muted: #B8B0A8;
-    --acc: #E8922D;
+    --acc: #E8922D;          /* fills: buttons, active segment */
+    --acc-text: #E8922D;     /* accent as text/icon — needs contrast on the page bg */
     --acc-dark: #C97A1F;
     --ok: #6BB56B;
+    --on-ok: #1E2A1E;
     --danger: #D9645F;
+    --scrim: rgba(0, 0, 0, .55);
+}
+
+:root[data-theme="light"] {
+    --bg: #F7F2EA;
+    --bg2: #FFFFFF;
+    --bg3: #E4DACC;
+    --line: #E4DACC;
+    --fg: #2B2420;
+    --muted: #6E6257;
+    --acc: #C97A1F;
+    --acc-text: #96540F;     /* darker: the 11px active nav label must stay legible */
+    --acc-dark: #A96214;
+    --ok: #357A3A;
+    --on-ok: #FFFFFF;
+    --danger: #C0392B;
+    --scrim: rgba(43, 36, 32, .45);
+}
+
+:root {
     --r: 12px;
     --nav-h: 60px;
+    color-scheme: dark light;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,10 +108,10 @@ nav button {
     color: var(--muted); font-size: 11px;
 }
 nav button svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-nav button.active { color: var(--acc); }
+nav button.active { color: var(--acc-text); }
 
 /* ===== Generic bits ===== */
-.card { background: var(--bg2); border-radius: var(--r); padding: 14px; }
+.card { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
 .row { display: flex; align-items: center; gap: 12px; }
 .grow { flex: 1; min-width: 0; }
 .muted { color: var(--muted); font-size: 13px; }
@@ -113,7 +148,7 @@ input[type=text], input[type=number] {
     background: var(--bg); border: 1px solid var(--bg3); border-radius: 10px;
     padding: 12px; font-size: 16px; width: 100%;
 }
-input:focus { outline: 2px solid var(--acc); outline-offset: -1px; }
+input:focus { outline: 2px solid var(--acc-text); outline-offset: -1px; }
 input[type=number] { -moz-appearance: textfield; text-align: center; }
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -127,7 +162,7 @@ input.num { width: 72px; flex: 0 1 72px; min-width: 0; padding: 10px 4px; }
 .fld input.num { width: 100%; flex: none; padding: 11px 4px; }
 
 /* ===== Workout entries ===== */
-.entry { background: var(--bg2); border-radius: var(--r); overflow: hidden; }
+.entry { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
 .entry.done { border-left: 3px solid var(--ok); }
 .entry-head { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
 .check {
@@ -135,7 +170,7 @@ input.num { width: 72px; flex: 0 1 72px; min-width: 0; padding: 10px 4px; }
     border: 2px solid var(--bg3); color: transparent; font-size: 15px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
 }
-.entry.done .check { background: var(--ok); border-color: var(--ok); color: #1E2A1E; }
+.entry.done .check { background: var(--ok); border-color: var(--ok); color: var(--on-ok); }
 .entry-main { flex: 1; min-width: 0; text-align: left; }
 .entry-name { font-weight: 600; font-size: 15px; }
 .entry-sub { font-size: 13px; color: var(--muted); }
@@ -148,7 +183,7 @@ input.num { width: 72px; flex: 0 1 72px; min-width: 0; padding: 10px 4px; }
 /* ===== Sheet ===== */
 .sheet-wrap {
     position: fixed; inset: 0; z-index: 50;
-    background: rgba(0,0,0,.55);
+    background: var(--scrim);
     display: flex; align-items: flex-end;
 }
 .sheet-wrap[hidden] { display: none; }
@@ -242,6 +277,36 @@ function save() {
     }
 }
 
+/* ============================ Theme ============================ */
+
+/* Kept out of `state` on purpose: it's a per-device preference, so importing a
+   backup from another phone must not drag its appearance along. */
+const THEME_KEY = 'gymlog.theme';
+const THEME_BG = { light: '#F7F2EA', dark: '#2D2520' };
+const THEMES = [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']];
+
+let theme = 'dark';
+try { theme = localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) {}
+
+function resolveTheme(t) {
+    if (t !== 'system') return t;
+    return window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
+function applyTheme() {
+    const t = resolveTheme(theme);
+    document.documentElement.dataset.theme = t;
+    const meta = document.querySelector('meta[name=theme-color]');
+    if (meta) meta.content = THEME_BG[t];
+}
+
+function setTheme(t) {
+    theme = t;
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+    applyTheme();
+    render();
+}
+
 const actById = (id) => state.activities.find((a) => a.id === id);
 const liveActs = () => state.activities.filter((a) => !a.archived);
 
@@ -328,7 +393,7 @@ function renderWorkout() {
                     <div style="font-weight:600">${esc(t.name)}</div>
                     <div class="muted">${t.items.length} ${t.items.length === 1 ? 'activity' : 'activities'}</div>
                 </div>
-                <span style="color:var(--acc);font-size:20px">▸</span>
+                <span style="color:var(--acc-text);font-size:20px">▸</span>
             </button>`).join('');
 
         main.innerHTML = (tpls || `<div class="empty">
@@ -508,7 +573,10 @@ function renderJournal() {
             <strong>No workouts logged yet</strong>
             Finished workouts land here.
         </div>`)
-        + `<h2 class="section">Data</h2>
+        + `<h2 class="section">Appearance</h2>
+           <div class="seg">${THEMES.map(([v, label]) =>
+               `<button data-act="theme" data-theme="${v}" class="${theme === v ? 'on' : ''}">${label}</button>`).join('')}</div>
+           <h2 class="section">Data</h2>
            <button class="btn ghost" data-act="export">Export backup</button>
            <button class="btn ghost" data-act="import">Import backup</button>
            <div class="muted" style="text-align:center;padding:4px 8px 0">
@@ -816,6 +884,7 @@ document.body.addEventListener('click', (e) => {
         break;
     case 'export': exportData(); break;
     case 'import': importData(); break;
+    case 'theme': setTheme(el.dataset.theme); break;
     case 'install':
         deferredInstall.prompt();
         deferredInstall = null;
@@ -873,6 +942,15 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 
+/* Follow the phone's day/night switch while set to System. */
+if (window.matchMedia) {
+    try {
+        matchMedia('(prefers-color-scheme: light)')
+            .addEventListener('change', () => { if (theme === 'system') applyTheme(); });
+    } catch (e) {}
+}
+
+applyTheme();
 render();
 </script>
 </body>
