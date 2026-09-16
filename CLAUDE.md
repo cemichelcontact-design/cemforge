@@ -48,7 +48,7 @@ Only books with a German edition show the EN/DE language switcher. Echoes of the
 ## Book series
 
 - **Echoes of the Veil** series: Echoes of the Veil (book 1), Craving (book 2)
-- **In Their Place** series: In Their Place (book 1), In Their Name (book 2 — English only, not yet published)
+- **In Their Place** series: In Their Place (book 1), In Their Name (book 2), In Their Blood (book 3 — on pre-order, releases December 8, 2026). All English only.
 
 New books should be added to `index.html` in series order. Unpublished books should use placeholder text and a `href="#"` for the Amazon link, and must not be committed/pushed until ready.
 
