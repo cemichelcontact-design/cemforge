@@ -134,6 +134,7 @@ nav button.active { color: var(--acc-text); }
     border-radius: 10px; color: var(--muted); font-size: 18px;
 }
 .iconbtn:active { background: var(--bg3); }
+.iconbtn:disabled { opacity: .3; }
 
 .empty { text-align: center; color: var(--muted); padding: 36px 20px; font-size: 15px; }
 .empty strong { display: block; color: var(--fg); font-size: 17px; margin-bottom: 6px; }
@@ -505,6 +506,8 @@ function editTemplate(id) {
         return `<div class="card" style="display:flex;flex-direction:column;gap:10px">
                 <div class="row">
                     <div class="grow truncate" style="font-weight:600">${esc(a.name)}</div>
+                    <button class="iconbtn" data-act="tpl-move" data-j="${j}" data-dir="-1" aria-label="Move up" ${j === 0 ? 'disabled' : ''}>↑</button>
+                    <button class="iconbtn" data-act="tpl-move" data-j="${j}" data-dir="1" aria-label="Move down" ${j === t.items.length - 1 ? 'disabled' : ''}>↓</button>
                     <button class="iconbtn" data-act="tpl-remove" data-j="${j}" aria-label="Remove">×</button>
                 </div>
                 ${fields}
@@ -851,6 +854,18 @@ document.body.addEventListener('click', (e) => {
         const t = state.templates.find((x) => x.id === sheet.dataset.tpl);
         t.items.splice(+el.dataset.j, 1);
         save(); editTemplate(t.id);
+        break;
+    }
+    case 'tpl-move': {
+        const t = state.templates.find((x) => x.id === sheet.dataset.tpl);
+        const j = +el.dataset.j, k = j + +el.dataset.dir;
+        if (!t || k < 0 || k >= t.items.length) break;
+        [t.items[j], t.items[k]] = [t.items[k], t.items[j]];
+        save();
+        /* Re-rendering the sheet would jump back to the top mid-reorder. */
+        const top = sheet.scrollTop;
+        editTemplate(t.id);
+        sheet.scrollTop = top;
         break;
     }
     case 'tpl-done':
