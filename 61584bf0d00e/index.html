@@ -177,9 +177,6 @@ input.num { width: 72px; flex: 0 1 72px; min-width: 0; padding: 10px 4px; }
 .entry-sub { font-size: 13px; color: var(--muted); }
 .entry-body { padding: 0 14px 12px; display: none; flex-direction: column; gap: 8px; }
 .entry.open .entry-body { display: flex; }
-.setrow { display: flex; align-items: center; gap: 8px; }
-.setrow .idx { width: 20px; flex: none; color: var(--muted); font-size: 13px; }
-.setrow .x { color: var(--muted); font-size: 13px; }
 
 /* ===== Sheet ===== */
 .sheet-wrap {
@@ -433,20 +430,27 @@ function renderWorkout() {
     tick = setInterval(paint, 20000);
 }
 
+/* Every set is the same reps × weight, so the entry is edited as one row.
+   Sessions still store a `sets` array, which keeps older varied logs readable. */
 function strengthBody(e, i) {
-    const sets = e.sets.map((s, j) => `
-        <div class="setrow">
-            <span class="idx">${j + 1}</span>
-            <input class="num" type="number" inputmode="numeric" step="1" min="0" value="${s.reps}"
-                   data-i="${i}" data-set="${j}" data-field="reps" aria-label="Reps">
-            <span class="x">reps</span>
-            <input class="num" type="number" inputmode="decimal" step="0.5" min="0" value="${s.weight}"
-                   data-i="${i}" data-set="${j}" data-field="weight" aria-label="Weight">
-            <span class="x">kg</span>
-            <span class="grow"></span>
-            <button class="iconbtn" data-act="del-set" data-i="${i}" data-set="${j}" aria-label="Remove set">×</button>
-        </div>`).join('');
-    return sets + `<button class="btn ghost sm" data-act="add-set" data-i="${i}">+ Add set</button>`;
+    const first = e.sets[0] || { reps: 10, weight: 0 };
+    const fld = (label, field, val, step, mode) => `<label class="fld"><span>${label}</span>
+        <input class="num" type="number" inputmode="${mode}" step="${step}" min="0" value="${val}"
+               data-i="${i}" data-field="${field}"></label>`;
+    return `<div class="fields" style="--cols:3">
+            ${fld('Sets', 'sets', e.sets.length, 1, 'numeric')}
+            ${fld('Reps', 'reps', first.reps, 1, 'numeric')}
+            ${fld('kg', 'weight', first.weight, 0.5, 'decimal')}
+        </div>`;
+}
+
+/* Rewrite the sets as n identical copies of the current reps × weight. */
+function setStrength(e, field, v) {
+    const base = Object.assign({ reps: 10, weight: 0 }, e.sets[0]);
+    let n = e.sets.length;
+    if (field === 'sets') n = Math.max(1, Math.round(v));
+    else base[field] = v;
+    e.sets = Array.from({ length: n }, () => ({ reps: base.reps, weight: base.weight }));
 }
 
 function cardioBody(e, i) {
@@ -631,7 +635,9 @@ function makeEntry(activityId, target) {
     if (a.kind === 'strength') {
         let sets;
         if (last && last.sets && last.sets.length) {
-            sets = last.sets.map((s) => ({ reps: s.reps, weight: s.weight }));
+            /* Older logs may have varied sets; carry the final (working) set forward. */
+            const ls = last.sets[last.sets.length - 1];
+            sets = last.sets.map(() => ({ reps: ls.reps, weight: ls.weight }));
         } else {
             const n = Math.max(1, (target && target.sets) || 3);
             sets = Array.from({ length: n }, () => ({
@@ -795,17 +801,6 @@ document.body.addEventListener('click', (e) => {
     case 'history':
         showHistory(cur.entries[i].activityId, cur.entries[i].name);
         break;
-    case 'add-set': {
-        const sets = cur.entries[i].sets;
-        const lastSet = sets[sets.length - 1];
-        sets.push(lastSet ? { reps: lastSet.reps, weight: lastSet.weight } : { reps: 10, weight: 0 });
-        save(); render();
-        break;
-    }
-    case 'del-set':
-        cur.entries[i].sets.splice(+el.dataset.set, 1);
-        save(); render();
-        break;
     case 'add-to-workout':
         pickActivity((activityId) => {
             cur.entries.push(makeEntry(activityId, null));
@@ -942,7 +937,7 @@ document.body.addEventListener('input', (e) => {
 
     if (el.dataset.field && state.current) {
         const entry = state.current.entries[+el.dataset.i];
-        if (el.dataset.set !== undefined) entry.sets[+el.dataset.set][el.dataset.field] = v;
+        if (entry.kind === 'strength') setStrength(entry, el.dataset.field, v);
         else entry[el.dataset.field] = v;
         const sub = main.querySelector('.entry[data-i="' + el.dataset.i + '"] .entry-sub');
         if (sub) sub.textContent = entrySummary(entry);
