@@ -365,7 +365,11 @@ function closeSheet() {
     sheetWrap.hidden = true;
     sheet.innerHTML = '';
 }
-sheetWrap.addEventListener('click', (e) => { if (e.target === sheetWrap) closeSheet(); });
+sheetWrap.addEventListener('click', (e) => {
+    if (e.target !== sheetWrap) return;
+    if (sheet.dataset.tpl) closeTemplate();
+    else closeSheet();
+});
 
 /* ============================ Render ============================ */
 
@@ -525,6 +529,18 @@ function editTemplate(id) {
         <button class="btn ghost" data-act="tpl-add">+ Add activity</button>
         <button class="btn" data-act="tpl-done">Done</button>`);
     sheet.dataset.tpl = id;
+}
+
+/* Leaving the editor by Done or by tapping outside: tidy the name and refresh the list. */
+function closeTemplate() {
+    const t = state.templates.find((x) => x.id === sheet.dataset.tpl);
+    delete sheet.dataset.tpl;
+    if (t) {
+        t.name = t.name.trim() || 'Untitled';
+        save();
+    }
+    closeSheet();
+    render();
 }
 
 /* ---------- Activities ---------- */
@@ -864,7 +880,7 @@ document.body.addEventListener('click', (e) => {
         break;
     }
     case 'tpl-done':
-        closeSheet(); render();
+        closeTemplate();
         break;
 
     /* --- activities --- */
@@ -932,6 +948,14 @@ sheet.addEventListener('click', (e) => {
 /* Number fields: write straight to state, no re-render, so focus is never stolen. */
 document.body.addEventListener('input', (e) => {
     const el = e.target;
+
+    /* Text, so it must be handled before the number parsing below rejects it. */
+    if (el.dataset.act === 'tpl-name') {
+        const t = state.templates.find((x) => x.id === sheet.dataset.tpl);
+        if (t) { t.name = el.value; save(); }
+        return;
+    }
+
     const v = el.value === '' ? 0 : parseFloat(el.value);
     if (isNaN(v)) return;
 
@@ -945,9 +969,6 @@ document.body.addEventListener('input', (e) => {
     } else if (el.dataset.tf) {
         const t = state.templates.find((x) => x.id === sheet.dataset.tpl);
         if (t) { t.items[+el.dataset.j][el.dataset.tf] = v; save(); }
-    } else if (el.dataset.act === 'tpl-name') {
-        const t = state.templates.find((x) => x.id === sheet.dataset.tpl);
-        if (t) { t.name = el.value; save(); }
     }
 });
 
